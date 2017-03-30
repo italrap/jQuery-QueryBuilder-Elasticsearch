@@ -1,6 +1,6 @@
 {
-  "version": "1.0.0",
-  "name": "jQuery-QueryBuilder-Elasticsearch",
-  "homepage": "https://github.com/piotch/jQuery-QueryBuilder-Elasticsearch.git",
-  "main": "./query-builder-elasticsearch.js"
+  "version": "1.1.0",
+  "name": "jquery-querybuilder-elasticsearch-etx",
+  "homepage": "https://github.com/davegraziosi/jQuery-QueryBuilder-Elasticsearch.git",
+  "main": "./query-builder-elasticsearch.js" 
 }
