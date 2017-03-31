@@ -165,6 +165,9 @@
                             );
                         }
 
+			if (rule.data && rule.data.hasOwnProperty('lowercase'))
+                               rule.field = rule.field+".lowercase";
+
                         if (ope.nb_inputs !== 0) {
                             var es_key_val = {};
                             if ( /^date/.exec(rule.type) ) {
