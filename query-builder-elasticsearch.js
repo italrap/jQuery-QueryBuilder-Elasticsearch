@@ -213,7 +213,8 @@
                         // we express this with a sub boolean query and must_not.
                         if (data.condition === 'OR' && (rule.operator === 'not_equal' || rule.operator === 'not_in' 
                                                 || rule.operator === 'not_contains'   || rule.operator === 'not_begins_with'   
-                                                || rule.operator === 'not_ends_with'  || rule.operator === 'is_null' )) {
+                                                || rule.operator === 'not_ends_with'  || rule.operator === 'is_null' 
+                                                || rule.operator === 'is_not_empty' )) {
                             return {'bool': {'must_not': [part]}}
                         } else {
                             return part
