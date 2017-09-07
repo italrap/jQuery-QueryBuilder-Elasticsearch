@@ -137,7 +137,7 @@
             			var transfVal = that.settings.DateExpressions[value] || value;
             			
             			var minutes = /^NOW - (\d+) minute$/.exec(value);
-            			var days = /^TRUNC(NOW) - (\d+)$/.exec(value);
+            			var days = /^TRUNC\(NOW\) - (\d+)$/.exec(value);
             			if (minutes) return "now-"+minutes[1]+"m";
             			if (days) return "now-"+days[1]+"d";
             			
