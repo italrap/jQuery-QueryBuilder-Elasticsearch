@@ -24,10 +24,11 @@
     
     	DateExpressions: {
 	        'NOW' : 'now',
+	        'NOW - 1' : 'now-1d',
 		'TRUNC(NOW)': 'now/d',
-		'TRUNC(NOW)-1': 'now/d-1d',
-		'TRUNC(NOW)-30': 'now/d-30d',
-		'TRUNC(NOW)-1 second' : 'now/d-1s',
+		//'TRUNC(NOW)-1': 'now/d-1d',
+		//'TRUNC(NOW)-30': 'now/d-30d',
+		//'TRUNC(NOW)-1 second' : 'now/d-1s',
 		'TRUNC(ADD_MONTHS(NOW, -1),MM)' : 'now-1M/M',
 		'TRUNC(NOW,MM)-1 second' : 'now/M-1s',
 		'TRUNC(NOW,IW)' : 'now/w',
@@ -136,7 +137,7 @@
             			var transfVal = that.settings.DateExpressions[value] || value;
             			
             			var minutes = /^NOW - (\d+) minute$/.exec(value);
-            			var days = /^NOW - (\d+)$/.exec(value);
+            			var days = /^TRUNC(NOW) - (\d+)$/.exec(value);
             			if (minutes) return "now-"+minutes[1]+"m";
             			if (days) return "now-"+days[1]+"d";
             			
