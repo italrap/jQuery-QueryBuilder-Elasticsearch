@@ -139,7 +139,7 @@
             			var minutes = /^NOW - (\d+) minute$/.exec(value);
             			var days = /^TRUNC\(NOW\) - (\d+)$/.exec(value);
             			if (minutes) return "now-"+minutes[1]+"m";
-            			if (days) return "now-"+days[1]+"d";
+            			if (days) return "now-"+days[1]+"d/d";
             			
             			if (/^\d{4}-\d{2}-\d{2}/.exec(value)) transfVal = addTimezoneToDate(transfVal);
             			
