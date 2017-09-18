@@ -62,10 +62,10 @@
             greater_or_equal: function(v){ return {'gte': v}; },
             between:          function(v){ return {'gte': v[0], 'lte': v[1]}; },
 	    not_between:      function(v){ return {'gte': v[0], 'lte': v[1]}; },
-            in :              function(v){ if (typeof v === 'string') return v.split(',').map(function(e) { return e.trim().toLowerCase();});
-            							  else return v.map(function(e) { return e.trim().toLowerCase();}); },
-            not_in:           function(v){ if (typeof v === 'string') return v.split(',').map(function(e) { return e.trim().toLowerCase();});
-            							   else return v.map(function(e) { return e.trim().toLowerCase();}); },
+            in :              function(v){ if (typeof v === 'string') return v.split(',').map(function(e) { return e.toString().trim().toLowerCase();});
+            							  else return v.map(function(e) { return e.toString().trim().toLowerCase();}); },
+            not_in:           function(v){ if (typeof v === 'string') return v.split(',').map(function(e) { return e.toString().trim().toLowerCase();});
+            							   else return v.map(function(e) { return e.toString().trim().toLowerCase();}); },
 	        last_n_minutes:   function(v){ return {'gte': v[0], 'lte': v[1]}; },
 	        period:           function(v){ return {'gte': v[0], 'lte': v[1]}; },
 	        before_last_n_minutes:   function(v){ return {'lt': v}; }
