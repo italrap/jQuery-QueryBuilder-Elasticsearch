@@ -66,9 +66,9 @@
             							  else return v.map(function(e) { return e.toString().trim().toLowerCase();}); },
             not_in:           function(v){ if (typeof v === 'string') return v.split(',').map(function(e) { return e.toString().trim().toLowerCase();});
             							   else return v.map(function(e) { return e.toString().trim().toLowerCase();}); },
-	        last_n_minutes:   function(v){ return {'gte': v[0], 'lte': v[1]}; },
-	        period:           function(v){ return {'gte': v[0], 'lte': v[1]}; },
-	        before_last_n_minutes:   function(v){ return {'lt': v}; }
+	        last_n_minutes:   function(v){ return {'gte': v[0], 'lt': v[1], 'time_zone': moment.tz.guess()}; },
+	        period:           function(v){ return {'gte': v[0], 'lt': v[1], 'time_zone': moment.tz.guess()}; },
+	        before_last_n_minutes:   function(v){ return {'lt': v, 'time_zone': moment.tz.guess()}; }
         }, 
 	ESBoolDateOperators: {
             equal:            function(v){ return {'lte': v, 'gte': v, 'format' : 'yyyy-MM-dd HH:mm:ssZ'}; },
@@ -145,7 +145,9 @@
             			
             			return transfVal;
             		}
-		    
+		   
+           
+           
 		   function addTimezoneToDate (value) {
 			var myDate = value.replace(/-/g, "/");
 			var dateValue = new Date(Date.parse(myDate));
