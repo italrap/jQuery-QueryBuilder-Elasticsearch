@@ -66,9 +66,30 @@
             							  else return v.map(function(e) { return e.toString().trim().toLowerCase();}); },
             not_in:           function(v){ if (typeof v === 'string') return v.split(',').map(function(e) { return e.toString().trim().toLowerCase();});
             							   else return v.map(function(e) { return e.toString().trim().toLowerCase();}); },
-	        last_n_minutes:   function(v){ return {'gte': v[0], 'lt': v[1], 'time_zone': moment.tz.guess()}; },
-	        period:           function(v){ return {'gte': v[0], 'lt': v[1], 'time_zone': moment.tz.guess()}; },
-	        before_last_n_minutes:   function(v){ return {'lt': v, 'time_zone': moment.tz.guess()}; }
+	        last_n_minutes:   function(v){ return {'gte': 'now-'+v+'m', 'time_zone': moment.tz.guess()}; },
+	        period:           function(v){
+                var subOp = v[0];
+                switch (subOp) {
+                    case 'days':
+                        return {'gte': 'now/d-'+v[1]+'d', 'lt': 'now/d-1s', 'time_zone': moment.tz.guess()};
+                        // "BETWEEN (TRUNC(SYSDATE) - INTERVAL '" + values[1] + "' day) AND TRUNC(SYSDATE)"
+                    case 'day':
+                        return {'gte': 'now-1d', 'time_zone': moment.tz.guess()};
+                        // 'BETWEEN SYSDATE - 1 AND SYSDATE'
+                    case 'week':
+                        return {'gte': 'now/w', 'lt': 'now/w+7d-1s', 'time_zone': moment.tz.guess()}
+                        // "BETWEEN TRUNC(SYSDATE,'IW') AND TRUNC(SYSDATE,'IW')+7-1/86400";
+                    case 'month':
+                        return {'gte': 'now-1M/M', 'lt': 'now/M-1s', 'time_zone': moment.tz.guess()};
+                        // "BETWEEN TRUNC(ADD_MONTHS(SYSDATE, -1),'MM') AND (TRUNC(SYSDATE,'MM')-1/86400)";
+                } 
+                return {'gte': v[0], 'lt': v[1], 'time_zone': moment.tz.guess()}; 
+            },
+	        before_last_n_minutes:   function(v){ return {'lt': 'now-'+v+'m', 'time_zone': moment.tz.guess()}; },
+	        before_last_n_days:   function(v){ return {'lt': 'now-'+v+'d', 'time_zone': moment.tz.guess()}; },
+	        // last_n_minutes:   function(v){ return {'gte': v[0], 'lt': v[1], 'time_zone': moment.tz.guess()}; },
+	        // period:           function(v){ return {'gte': v[0], 'lt': v[1], 'time_zone': moment.tz.guess()}; },
+	        // before_last_n_minutes:   function(v){ return {'lt': v, 'time_zone': moment.tz.guess()}; },
         }, 
 	ESBoolDateOperators: {
             equal:            function(v){ return {'lte': v, 'gte': v, 'format' : 'yyyy-MM-dd HH:mm:ssZ'}; },
