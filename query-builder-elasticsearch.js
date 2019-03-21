@@ -32,16 +32,13 @@
 		'TRUNC(ADD_MONTHS(NOW, -1),MM)' : 'now-1M/M',
 		'TRUNC(NOW,MM)-1 second' : 'now/M-1s',
 		'TRUNC(NOW,IW)' : 'now/w',
-		'TRUNC(TO_DATE(NOW),IW)+7-1 second' : 'now/w+7d-1s'
-		/*'NOW - 1' : 'now-1d',
-		'NOW - 2' : 'now-2d',
-		'NOW - 7' : 'now-7d',
-		'NOW - 30' : 'now-30d',
-	    	'NOW - 1 minute' : 'now-1m',
-	    	'NOW - 300 minute' : 'now-300m',
-	    	'NOW - 120 minute' : 'now-120m',
-	    	'NOW - 60 minute' : 'now-60m',
-	    	'NOW - 600 minute': 'now-600m'*/	
+		'TRUNC(TO_DATE(NOW),IW)+7-1 second' : 'now/w+7d-1s',
+		'SYSDATE' : 'now',
+		'SYSDATE - 1' : 'now-1d'
+		'TRUNC(SYSDATE,\'IW\')' : 'now/w',
+		'TRUNC(SYSDATE,\'IW\')+7-1/86400': 'now/w+7d-1s',
+		'TRUNC(ADD_MONTHS(SYSDATE, -1),\'MM\')': 'now-1M/M',
+		'TRUNC(SYSDATE,\'MM\')-1/86400' : 'now/M-1s'
 	},
         ESBoolOperators: {
             is_empty:         function(){ return "term"; },
@@ -66,7 +63,12 @@
             							  else return v.map(function(e) { return e.toString().trim().toLowerCase();}); },
             not_in:           function(v){ if (typeof v === 'string') return v.split(',').map(function(e) { return e.toString().trim().toLowerCase();});
             							   else return v.map(function(e) { return e.toString().trim().toLowerCase();}); },
-	        last_n_minutes:   function(v){ return {'gte': 'now-'+v+'m', 'time_zone': moment.tz.guess()}; },
+	        last_n_minutes:   function(v){ 
+			     if (Array.isArray(v) && v.lenght==2 )  
+				return {'gte': v[0], 'lt': v[1], 'time_zone': moment.tz.guess()};
+			     else
+				return {'gte': 'now-'+v+'m', 'time_zone': moment.tz.guess()}; 
+			},
 	        period:           function(v){
                 var subOp = v[0];
                 switch (subOp) {
@@ -81,15 +83,26 @@
                         // "BETWEEN TRUNC(SYSDATE,'IW') AND TRUNC(SYSDATE,'IW')+7-1/86400";
                     case 'month':
                         return {'gte': 'now-1M/M', 'lt': 'now/M-1s', 'time_zone': moment.tz.guess()};
-                        // "BETWEEN TRUNC(ADD_MONTHS(SYSDATE, -1),'MM') AND (TRUNC(SYSDATE,'MM')-1/86400)";
+                        // "BETWEEN TRUNC(ADD_MONTHS(SYSDATE, -1),'MM') AND (TRUNC(SYSDATE,'MM')-1/86400)";	
                 } 
                 return {'gte': v[0], 'lt': v[1], 'time_zone': moment.tz.guess()}; 
             },
-	        before_last_n_minutes:   function(v){ return {'lt': 'now-'+v+'m', 'time_zone': moment.tz.guess()}; },
-	        before_last_n_days:   function(v){ return {'lt': 'now-'+v+'d', 'time_zone': moment.tz.guess()}; },
+	        before_last_n_minutes:   function(v){ 
+			if (typeof v === 'string' && /^\d+$/.exec(v)) 
+				return {'lt': 'now-'+v+'m', 'time_zone': moment.tz.guess()}; 
+			else
+				return {'lt': v, 'time_zone': moment.tz.guess()};
+		},
+	        before_last_n_days:   function(v){ 
+			if (typeof v === 'string' && /^\d+$/.exec(v)) 
+				return {'lt': 'now-'+v+'d', 'time_zone': moment.tz.guess()}; 
+			else 
+				return {'lt': v, 'time_zone': moment.tz.guess()};
+		},
 	        // last_n_minutes:   function(v){ return {'gte': v[0], 'lt': v[1], 'time_zone': moment.tz.guess()}; },
 	        // period:           function(v){ return {'gte': v[0], 'lt': v[1], 'time_zone': moment.tz.guess()}; },
 	        // before_last_n_minutes:   function(v){ return {'lt': v, 'time_zone': moment.tz.guess()}; },
+		
         }, 
 	ESBoolDateOperators: {
             equal:            function(v){ return {'lte': v, 'gte': v, 'format' : 'yyyy-MM-dd HH:mm:ssZ'}; },
@@ -157,8 +170,8 @@
                     function transformDateExpression(value) {
             			var transfVal = that.settings.DateExpressions[value] || value;
             			
-            			var minutes = /^NOW - (\d+) minute$/.exec(value);
-            			var days = /^TRUNC\(NOW\) - (\d+)$/.exec(value);
+            			var minutes = /^(?:NOW|SYSDATE) - (?:INTERVAL )?'?(\d+)'? minute$/.exec(value);
+            			var days = /^TRUNC\((?:NOW|SYSDATE)\) - (?:INTERVAL )?'?(\d+)'?(?: day)?$/.exec(value);
             			if (minutes) return "now-"+minutes[1]+"m";
             			if (days) return "now-"+days[1]+"d/d";
             			
