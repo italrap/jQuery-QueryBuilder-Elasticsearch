@@ -34,7 +34,7 @@
 		'TRUNC(NOW,IW)' : 'now/w',
 		'TRUNC(TO_DATE(NOW),IW)+7-1 second' : 'now/w+7d-1s',
 		'SYSDATE' : 'now',
-		'SYSDATE - 1' : 'now-1d'
+		'SYSDATE - 1' : 'now-1d',
 		'TRUNC(SYSDATE,\'IW\')' : 'now/w',
 		'TRUNC(SYSDATE,\'IW\')+7-1/86400': 'now/w+7d-1s',
 		'TRUNC(ADD_MONTHS(SYSDATE, -1),\'MM\')': 'now-1M/M',
