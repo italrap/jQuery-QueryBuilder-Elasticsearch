@@ -88,17 +88,17 @@
                 return {'gte': v[0], 'lt': v[1], 'time_zone': moment.tz.guess()}; 
             },
 	        before_last_n_minutes:   function(v){ 
-			if (typeof v === 'string' && /^\d+$/.exec(v)) 
-				return {'lt': 'now-'+v+'m', 'time_zone': moment.tz.guess()}; 
-			else
-				return {'lt': v, 'time_zone': moment.tz.guess()};
-		},
-	        before_last_n_days:   function(v){ 
-			if (typeof v === 'string' && /^\d+$/.exec(v)) 
-				return {'lt': 'now-'+v+'d', 'time_zone': moment.tz.guess()}; 
-			else 
-				return {'lt': v, 'time_zone': moment.tz.guess()};
-		},
+                if (typeof v === 'number' || (typeof v === 'string' && /^\d+$/.exec(v))) 
+                    return {'lt': 'now-'+v+'m', 'time_zone': moment.tz.guess()}; 
+                else
+                    return {'lt': v, 'time_zone': moment.tz.guess()};
+            },
+            before_last_n_days:   function(v){ 
+                if (typeof v === 'number' || (typeof v === 'string' && /^\d+$/.exec(v))) 
+                    return {'lt': 'now-'+v+'d', 'time_zone': moment.tz.guess()}; 
+                else 
+                    return {'lt': v, 'time_zone': moment.tz.guess()};
+            },
 	        // last_n_minutes:   function(v){ return {'gte': v[0], 'lt': v[1], 'time_zone': moment.tz.guess()}; },
 	        // period:           function(v){ return {'gte': v[0], 'lt': v[1], 'time_zone': moment.tz.guess()}; },
 	        // before_last_n_minutes:   function(v){ return {'lt': v, 'time_zone': moment.tz.guess()}; },
